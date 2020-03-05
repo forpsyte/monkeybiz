@@ -1,5 +1,5 @@
-import 'package:mailchimp/core/features/firestore/data/datasources/document_local_data_source_interface.dart';
-import 'package:mailchimp/core/features/firestore/domain/entities/document.dart';
+import '../../domain/entities/document.dart';
+import 'document_local_data_source_interface.dart';
 
 class DocumentLocalDataSource implements DocumentLocalDataSourceInterface {
   @override
