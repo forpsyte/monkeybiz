@@ -1,0 +1,11 @@
+{
+    "document_id": "testid",
+    "data": {
+        "double": 2.0,
+        "int": 1,
+        "bool": true,
+        "string": "test string",
+        "array": ["Ford", "BMW", "Fiat"],
+        "datetime": "1969-07-20 20:18:04Z"
+    }
+}
