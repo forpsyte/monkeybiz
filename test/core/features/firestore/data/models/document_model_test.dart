@@ -110,4 +110,18 @@ void main() {
       },
     );
   });
+
+  group('field', () {
+    test(
+      'should return the field value specified by the name/key',
+      () async {
+        // arrange
+        final name = 'double';
+        // act
+        final result = tDocumentModel.field(name);
+        // assert
+        expect(result, equals(2.0));
+      },
+    );
+  });
 }

@@ -20,15 +20,33 @@ class DocumentRepository implements DocumentRepositoryInterface {
     @required this.networkInfo,
   });
   @override
-  Future<Either<Failure, bool>> delete(Document doc) {
-    // TODO: implement delete
-    return null;
+  Future<Either<Failure, void>> delete(Document doc) async {
+    if (!(await networkInfo.isConnected)) {
+      return Left(ConnectionFailure());
+    }
+
+    try {
+      final result = await remoteDataSource.delete(doc);
+      await localDataSource.delete(doc);
+      return Right(result);
+    } on ServerException {
+      return Left(ServerFailure());
+    }
   }
 
   @override
-  Future<Either<Failure, bool>> deleteById(String doc) {
-    // TODO: implement deleteById
-    return null;
+  Future<Either<Failure, void>> deleteById(String id) async {
+    if (!(await networkInfo.isConnected)) {
+      return Left(ConnectionFailure());
+    }
+
+    try {
+      final result = await remoteDataSource.deleteById(id);
+      await localDataSource.deleteById(id);
+      return Right(result);
+    } on ServerException {
+      return Left(ServerFailure());
+    }
   }
 
   @override
@@ -40,6 +58,13 @@ class DocumentRepository implements DocumentRepositoryInterface {
         return Right(document);
       } on ServerException {
         return Left(ServerFailure());
+      }
+    } else {
+      try {
+        final document = await localDataSource.getById(id);
+        return Right(document);
+      } on CacheException {
+        return Left(CacheFailure());
       }
     }
   }
@@ -54,12 +79,27 @@ class DocumentRepository implements DocumentRepositoryInterface {
       } on ServerException {
         return Left(ServerFailure());
       }
+    } else {
+      try {
+        final documents = await localDataSource.getList();
+        return Right(documents);
+      } on CacheException {
+        return Left(CacheFailure());
+      }
     }
   }
 
   @override
-  Future<Either<Failure, Document>> save(Document doc) {
-    // TODO: implement save
-    return null;
+  Future<Either<Failure, Document>> save(Document doc) async {
+    if (!(await networkInfo.isConnected)) {
+      return Left(ConnectionFailure());
+    }
+
+    try {
+      final document = await remoteDataSource.save(doc);
+      return Right(document);
+    } on ServerException {
+      return Left(ServerFailure());
+    }
   }
 }

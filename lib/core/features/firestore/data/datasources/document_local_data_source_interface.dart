@@ -25,11 +25,11 @@ abstract class DocumentLocalDataSourceInterface {
   /// Uses the device storage to delete a document.
   ///
   /// Throws a [CacheException] if no cached data is present.
-  Future<bool> delete(Document document);
+  Future<void> delete(Document document);
 
   /// Uses the device storage to delete a document specified
   /// by ID.
   ///
   /// Throws a [CacheException] if no cached data is present.
-  Future<bool> deleteById(String id);
+  Future<void> deleteById(String id);
 }

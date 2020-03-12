@@ -8,10 +8,9 @@ class DocumentModel extends Document {
   final Map<String, dynamic> _data;
 
   DocumentModel({
-    @required id,
+    id,
     @required data,
-  })  : assert(id != null),
-        assert(data != null),
+  })  : assert(data != null),
         this._data = data,
         super(id: id, data: data);
 
@@ -43,6 +42,13 @@ class DocumentModel extends Document {
   }
 
   Map<String, dynamic> get data => _data;
+
+  dynamic field(String name) {
+    if (!data.containsKey(name)) {
+      return null;
+    }
+    return data[name];
+  }
 
   Map<String, dynamic> toJson() {
     return {

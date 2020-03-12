@@ -1,3 +1,5 @@
+import 'package:mailchimp/core/features/firestore/data/models/document_model.dart';
+
 import '../../domain/entities/document.dart';
 
 abstract class DocumentRemoteDataSourceInterface {
@@ -15,16 +17,16 @@ abstract class DocumentRemoteDataSourceInterface {
   /// Uses the firestore api to create/update a document.
   ///
   /// Throws a [ServerException] for all error codes.
-  Future<Document> save(Document document);
+  Future<Document> save(DocumentModel document);
 
   /// Uses the firestore api to delete a document.
   ///
   /// Throws a [ServerException] for all error codes.
-  Future<bool> delete(Document document);
+  Future<void> delete(Document document);
 
   /// Uses the firestore api to delete a document specified
   /// by ID.
   ///
   /// Throws a [ServerException] for all error codes.
-  Future<bool> deleteById(String id);
+  Future<void> deleteById(String id);
 }

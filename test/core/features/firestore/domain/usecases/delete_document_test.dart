@@ -1,4 +1,3 @@
-import 'package:dartz/dartz.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mailchimp/core/features/firestore/domain/entities/document.dart';
@@ -23,15 +22,11 @@ void main() {
   );
 
   test(
-    'should return true when document is deleted successfully',
+    'should delete document when call is made to the repository',
     () async {
-      // arrange
-      when(mockDocumentRepository.delete(any))
-          .thenAnswer((_) async => Right(true));
       // act
-      final result = await usecase(tDocument);
+      await usecase(tDocument);
       // assert
-      expect(result, Right(true));
       verify(mockDocumentRepository.delete(tDocument));
       verifyNoMoreInteractions(mockDocumentRepository);
     },

@@ -6,10 +6,9 @@ class Document extends Equatable {
   final Map<String, dynamic> _data;
 
   Document({
-    @required id,
+    id,
     @required data,
-  })  : assert(id != null),
-        assert(data != null),
+  })  : assert(data != null),
         this.documentId = id,
         this._data = data;
 
