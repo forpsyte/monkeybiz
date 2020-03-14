@@ -42,4 +42,19 @@ void main() {
       verifyNoMoreInteractions(mockDocumentRepository);
     },
   );
+
+  test(
+    'should get the list of documents from the repository and cache the result',
+    () async {
+      // arrange
+      when(mockDocumentRepository.getList(any))
+          .thenAnswer((_) async => Right(tDocumentList));
+      // act
+      final result = await usecase(NoParams(), true);
+      // assert
+      expect(result, equals(Right(tDocumentList)));
+      verify(mockDocumentRepository.getList(true));
+      verifyNoMoreInteractions(mockDocumentRepository);
+    },
+  );
 }

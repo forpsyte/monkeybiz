@@ -11,7 +11,7 @@ class GetAllDocuments extends UseCase<List<Document>, NoParams> {
   GetAllDocuments(this.repository);
 
   @override
-  Future<Either<Failure, List<Document>>> call(NoParams params) async {
-    return await repository.getList();
+  Future<Either<Failure, List<Document>>> call(NoParams params, [bool cache = false]) async {
+    return await repository.getList(cache);
   }
 }

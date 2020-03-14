@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
-import 'package:mailchimp/core/error/exceptions.dart';
-import 'package:mailchimp/core/features/firestore/data/models/document_model.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../error/exceptions.dart';
 import '../../domain/entities/document.dart';
+import '../models/document_model.dart';
 import 'document_remote_data_source_interface.dart';
 
 class DocumentRemoteDataSource implements DocumentRemoteDataSourceInterface {

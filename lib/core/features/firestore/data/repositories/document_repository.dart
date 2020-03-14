@@ -50,11 +50,14 @@ class DocumentRepository implements DocumentRepositoryInterface {
   }
 
   @override
-  Future<Either<Failure, Document>> getById(String id) async {
+  Future<Either<Failure, Document>> getById(String id,
+      [bool cache = false]) async {
     if (await networkInfo.isConnected) {
       try {
         final document = await remoteDataSource.getById(id);
-        localDataSource.cache(document);
+        if (cache) {
+          localDataSource.cache(document);
+        }
         return Right(document);
       } on ServerException {
         return Left(ServerFailure());
@@ -70,11 +73,13 @@ class DocumentRepository implements DocumentRepositoryInterface {
   }
 
   @override
-  Future<Either<Failure, List<Document>>> getList() async {
+  Future<Either<Failure, List<Document>>> getList([bool cache = false]) async {
     if (await networkInfo.isConnected) {
       try {
         final documents = await remoteDataSource.getList();
-        localDataSource.cacheList(documents);
+        if (cache) {
+          localDataSource.cacheList(documents);
+        }
         return Right(documents);
       } on ServerException {
         return Left(ServerFailure());

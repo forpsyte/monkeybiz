@@ -1,3 +1,5 @@
+import 'package:mailchimp/core/features/firestore/data/models/document_model.dart';
+
 import '../../domain/entities/document.dart';
 
 abstract class DocumentLocalDataSourceInterface {
@@ -9,7 +11,12 @@ abstract class DocumentLocalDataSourceInterface {
   /// Uses the device storage to store all documents.
   ///
   /// Throws a [CacheException] for all error codes.
-  Future<void> cacheList(List<Document> documents);
+  Future<bool> cacheList(List<DocumentModel> documents);
+
+  /// Uses the device storage to clear all documents.
+  ///
+  /// Throws a [CacheException] for all error codes.
+  Future<bool> clearList();
 
   /// Uses the device storage to retrive a document specified
   /// by ID.
@@ -20,16 +27,16 @@ abstract class DocumentLocalDataSourceInterface {
   /// Uses the device storage to store a document.
   ///
   /// Throws a [CacheException] for all error codes.
-  Future<void> cache(Document document);
+  Future<bool> cache(DocumentModel document);
 
   /// Uses the device storage to delete a document.
   ///
   /// Throws a [CacheException] if no cached data is present.
-  Future<void> delete(Document document);
+  Future<bool> delete(Document document);
 
   /// Uses the device storage to delete a document specified
   /// by ID.
   ///
   /// Throws a [CacheException] if no cached data is present.
-  Future<void> deleteById(String id);
+  Future<bool> deleteById(String id);
 }

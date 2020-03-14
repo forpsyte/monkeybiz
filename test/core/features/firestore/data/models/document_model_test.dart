@@ -103,7 +103,7 @@ void main() {
             'bool': true,
             'string': 'test string',
             'array': [ "Ford", "BMW", "Fiat" ],
-            'datetime': DateTime.parse("1969-07-20 20:18:04Z"),
+            'datetime': DateTime.parse("1969-07-20 20:18:04Z").toString(),
           },
         };
         expect(result, equals(expectedMap));
@@ -121,6 +121,18 @@ void main() {
         final result = tDocumentModel.field(name);
         // assert
         expect(result, equals(2.0));
+      },
+    );
+
+    test(
+      'should return null when the data specified by the name/key does not exist',
+      () async {
+        // arrange
+        final name = 'undefined';
+        // act
+        final result = tDocumentModel.field(name);
+        // assert
+        expect(result, equals(null));
       },
     );
   });

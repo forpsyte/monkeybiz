@@ -11,8 +11,8 @@ class GetDocumentById extends UseCase<Document, String> {
   GetDocumentById(this.repository);
 
   @override
-  Future<Either<Failure, Document>> call(String documentId) async {
-    return await repository.getById(documentId);
+  Future<Either<Failure, Document>> call(String documentId, [bool cache = false]) async {
+    return await repository.getById(documentId, cache);
   }
 }
 

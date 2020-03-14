@@ -114,7 +114,7 @@ void main() {
           when(mockRemoteDataSource.getList())
               .thenAnswer((_) async => tDocumentList);
           // act
-          await repository.getList();
+          await repository.getList(true);
           // assert
           verify(mockRemoteDataSource.getList());
           verify(mockLocalDataSource.cacheList(tDocumentList));
@@ -203,7 +203,7 @@ void main() {
           when(mockRemoteDataSource.getById(any))
               .thenAnswer((_) async => tDocument);
           // act
-          await repository.getById(testId);
+          await repository.getById(testId, true);
           // assert
           verify(mockRemoteDataSource.getById(testId));
           verify(mockLocalDataSource.cache(tDocument));

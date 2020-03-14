@@ -51,9 +51,15 @@ class DocumentModel extends Document {
   }
 
   Map<String, dynamic> toJson() {
+    final _data = Map.from(data);
+    _data.forEach((key, value){
+      if (value is DateTime) {
+        _data[key] = value.toString();
+      }
+    });
     return {
       'document_id': documentId,
-      'data' : data,
+      'data' : _data,
     };
   }
 

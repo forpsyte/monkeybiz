@@ -36,4 +36,19 @@ void main() {
       verifyNoMoreInteractions(mockDocumentRepository);
     },
   );
+
+  test(
+    'should return the document specified by the id and cache the result',
+    () async {
+      // arrange
+      when(mockDocumentRepository.getById(any, any))
+          .thenAnswer((_) async => Right(tDocument));
+      // act
+      final result = await usecase('testId', true);
+      // assert
+      expect(result, Right(tDocument));
+      verify(mockDocumentRepository.getById('testId', true));
+      verifyNoMoreInteractions(mockDocumentRepository);
+    },
+  );
 }
