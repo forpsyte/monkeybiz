@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:mailchimp/core/error/failures.dart';
-import 'package:mailchimp/core/features/firestore/domain/repositories/document_repository_interface.dart';
-import 'package:mailchimp/core/usecases/usecase.dart';
+
+import '../../../../error/failures.dart';
+import '../../../../usecases/usecase.dart';
+import '../repositories/document_repository_interface.dart';
 
 class DeleteDocumentById extends UseCase<void, String> {
   final DocumentRepositoryInterface repository;

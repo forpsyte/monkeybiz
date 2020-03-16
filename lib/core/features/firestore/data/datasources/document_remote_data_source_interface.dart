@@ -1,6 +1,5 @@
-import 'package:mailchimp/core/features/firestore/data/models/document_model.dart';
-
 import '../../domain/entities/document.dart';
+import '../models/document_model.dart';
 
 abstract class DocumentRemoteDataSourceInterface {
   /// Uses the firestore api to retrive all documents.

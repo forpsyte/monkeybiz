@@ -1,6 +1,5 @@
-import 'package:mailchimp/core/features/firestore/data/models/document_model.dart';
-
 import '../../domain/entities/document.dart';
+import '../models/document_model.dart';
 
 abstract class DocumentLocalDataSourceInterface {
   /// Uses the device storage to retrive all documents.

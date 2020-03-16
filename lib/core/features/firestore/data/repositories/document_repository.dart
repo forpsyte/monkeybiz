@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:mailchimp/core/error/exceptions.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../error/exceptions.dart';
 import '../../../../error/failures.dart';
 import '../../../../network/network_info_interface.dart';
 import '../../domain/entities/document.dart';
