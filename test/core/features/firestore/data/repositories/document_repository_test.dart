@@ -68,18 +68,6 @@ void main() {
     });
   }
 
-  test(
-    'should check if device is online',
-    () async {
-      // arrange
-      when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      // act
-      repository.getList();
-      // assert
-      verify(mockNetworkInfo.isConnected);
-    },
-  );
-
   group('getList', () {
     test(
       'should check if device is online',
