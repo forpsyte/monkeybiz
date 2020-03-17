@@ -32,17 +32,30 @@ void main() {
       when(mockAccessTokenRepository.getToken(any, any, any))
           .thenAnswer((_) async => Right(tAccessToken));
       // act
-      final result = await usecase(RequestParams(
-        fields: {
-          'client_id': tClientId,
-          'client_secret': tClientSecret,
-          'redirect_uri': tRedirectUri,
-        },
+      final result = await usecase(OauthParams(
+        clientId: tClientId,
+        clientSecret: tClientSecret,
+        redirectUri: tRedirectUri,
       ));
       // assert
       expect(result, Right(tAccessToken));
 			verify(mockAccessTokenRepository.getToken(tClientId, tClientSecret, tRedirectUri));
 			verifyNoMoreInteractions(mockAccessTokenRepository);
+    },
+  );
+
+  test(
+    'should return the cached AccessToken from the repository',
+    () async {
+      // arrange
+      when(mockAccessTokenRepository.getCachedToken())
+          .thenAnswer((_) async => Right(tAccessToken));
+      // act
+      final result = await usecase();
+      // assert
+      expect(result, Right(tAccessToken));
+      verify(mockAccessTokenRepository.getCachedToken());
+      verifyNoMoreInteractions(mockAccessTokenRepository);
     },
   );
 }

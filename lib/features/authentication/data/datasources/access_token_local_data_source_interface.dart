@@ -1,7 +1,7 @@
-import '../../domain/entities/access_token.dart';
+import '../models/access_token_model.dart';
 
 abstract class AccessTokenLocalDataSourceInterface {
-  Future<AccessToken> getToken();
-  Future<bool> setToken(AccessToken token);
+  Future<AccessTokenModel> getToken();
+  Future<bool> setToken(AccessTokenModel token);
   Future<bool> removeToken();
 }

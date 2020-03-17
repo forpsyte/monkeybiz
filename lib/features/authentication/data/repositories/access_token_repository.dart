@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info_interface.dart';
 import '../../domain/entities/access_token.dart';
@@ -25,11 +26,16 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
     String clientSecret,
     String redirectUri,
   ) async {
-    if (await networkInfo.isConnected) {
-      final token = await remoteDataSource.getToken(clientId, clientSecret, redirectUri);
-      return Right(token);
-    } else {
+    if (!(await networkInfo.isConnected)) {
       return Left(ConnectionFailure());
+    }
+
+    try {
+      final token = await remoteDataSource.getToken(clientId, clientSecret, redirectUri);
+      await localDataSource.setToken(token);
+      return Right(token);
+    } on AuthenticationException {
+      return Left(AuthenticationFailure());
     }
   }
 

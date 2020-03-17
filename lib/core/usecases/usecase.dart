@@ -23,3 +23,18 @@ class RequestParams extends Equatable {
   @override
   List<Object> get props => [fields];
 }
+
+class OauthParams extends Equatable {
+  final String clientId;
+  final String clientSecret;
+  final String redirectUri;
+
+  OauthParams({
+    this.clientId,
+    this.clientSecret,
+    this.redirectUri,
+  });
+
+  @override
+  List<Object> get props => [clientId, clientSecret, redirectUri];
+}

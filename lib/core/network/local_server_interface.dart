@@ -8,13 +8,14 @@ abstract class LocalServerInterface {
   LocalServerInterface(this.onRequestParams, this.server);
 
   Future<Stream<Map<String, String>>> start() {
-    server.listen(handleRequest);
+    server.listen(_handleRequest);
     return Future.value(onRequestParams.stream);
   }
   
-  Future<void> stop() async {
-    await onRequestParams.close();
+  void _handleRequest(HttpRequest request) async {
+    handleRequest(request);
     await server.close(force: true);
+    await onRequestParams.close();
   }
   
   void handleRequest(HttpRequest request);

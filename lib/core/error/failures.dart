@@ -39,3 +39,8 @@ class InvalidEmailFailure extends Failure {
   @override
   List<Object> get props => [];
 }
+
+class AuthenticationFailure extends Failure {
+  @override
+  List<Object> get props => [];
+}

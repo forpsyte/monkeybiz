@@ -1,5 +1,5 @@
-import 'package:mailchimp/features/authentication/domain/entities/access_token.dart';
+import '../models/access_token_model.dart';
 
 abstract class AccessTokenRemoteDataSourceInterface {
-  Future<AccessToken> getToken(String clientId, String clientSecret, String redirectUri);
+  Future<AccessTokenModel> getToken(String clientId, String clientSecret, String redirectUri);
 }

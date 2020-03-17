@@ -1,13 +1,14 @@
 import 'package:dartz/dartz.dart';
-import 'package:mailchimp/core/error/failures.dart';
+import 'package:mailchimp/features/authentication/data/models/access_token_model.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:mailchimp/core/error/exceptions.dart';
+import 'package:mailchimp/core/error/failures.dart';
 import 'package:mailchimp/core/network/network_info_interface.dart';
 import 'package:mailchimp/features/authentication/data/datasources/access_token_local_data_source.dart';
 import 'package:mailchimp/features/authentication/data/datasources/access_token_remote_data_source.dart';
 import 'package:mailchimp/features/authentication/data/repositories/access_token_repository.dart';
-import 'package:mailchimp/features/authentication/domain/entities/access_token.dart';
 
 class MockAccessTokenRemoteDataSource extends Mock
     implements AccessTokenRemoteDataSource {}
@@ -38,8 +39,8 @@ void main() {
   final tClientSecret = 'test_client_secret';
   final tRedirectUri = 'http://127.0.0.1:8080';
 
-  final tAccessToken = AccessToken(
-    token: "5c6ccc561059aa386da9d112215bae55",
+  final tAccessToken = AccessTokenModel(
+    token: '5c6ccc561059aa386da9d112215bae55',
     expiresIn: 0,
     scope: null,
   );
@@ -82,7 +83,7 @@ void main() {
 
     runTestsOnline((){
       test(
-        'should return remote data when authentication is successful',
+        'should return remote data when call to remote datasource is successful',
         () async {
           // arrange
           when(mockRemoteDataSource.getToken(tClientId, tClientSecret, tRedirectUri))
@@ -91,6 +92,33 @@ void main() {
           final result = await repository.getToken(tClientId, tClientSecret, tRedirectUri);
           // assert
           expect(result, equals(Right(tAccessToken)));
+        },
+      );
+
+      test(
+        'should cache the result when call to remote datasource is successfull',
+        () async {
+          // arrange
+          when(mockRemoteDataSource.getToken(tClientId, tClientSecret, tRedirectUri))
+            .thenAnswer((_) async => tAccessToken);
+          // act
+          await repository.getToken(tClientId, tClientSecret, tRedirectUri);
+          // assert
+          verify(mockLocalDataSource.setToken(tAccessToken));
+        },
+      );
+
+      test(
+        'should return AuthenticationFailure when call to remote datasource is unsuccessful',
+        () async {
+          // arrange
+          when(mockRemoteDataSource.getToken(tClientId, tClientSecret, tRedirectUri))
+              .thenThrow(AuthenticationException());
+          // act
+          final result = await repository.getToken(tClientId, tClientSecret, tRedirectUri);
+          // assert
+          expect(result, equals(Left(AuthenticationFailure())));
+      
         },
       );
     });
@@ -110,7 +138,7 @@ void main() {
 
   group('getCachedToken', () {
     test(
-      'should return AccessToken when the cached data is present',
+      'should return AccessToken when call to local datasource successful',
       () async {
         // arrange
         when(mockLocalDataSource.getToken())
@@ -123,7 +151,7 @@ void main() {
     );
 
     test(
-      'should return CacheFailure when there is no cached data present',
+      'should return CacheFailure when call to local datasource unsuccessful',
       () async {
         // arrange
         when(mockLocalDataSource.getToken())
