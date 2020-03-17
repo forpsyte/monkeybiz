@@ -55,7 +55,7 @@ class DocumentLocalDataSource implements DocumentLocalDataSourceInterface {
   }
 
   @override
-  Future<Document> getById(String id) {
+  Future<DocumentModel> getById(String id) {
     if (!sharedPreferences.containsKey(id)) {
       throw CacheException();
     }
@@ -65,7 +65,7 @@ class DocumentLocalDataSource implements DocumentLocalDataSourceInterface {
   }
 
   @override
-  Future<List<Document>> getList() {
+  Future<List<DocumentModel>> getList() {
     if (!sharedPreferences.containsKey(DOCUMENT_LIST_CACHE_KEY)) {
       throw CacheException();
     }

@@ -5,7 +5,7 @@ abstract class DocumentLocalDataSourceInterface {
   /// Uses the device storage to retrive all documents.
   ///
   /// Throws a [CacheException] if no cached data is present.
-  Future<List<Document>> getList();
+  Future<List<DocumentModel>> getList();
 
   /// Uses the device storage to store all documents.
   ///
@@ -21,7 +21,7 @@ abstract class DocumentLocalDataSourceInterface {
   /// by ID.
   /// 
   /// Throws a [CacheException] if no cached data is present.
-  Future<Document> getById(String id);
+  Future<DocumentModel> getById(String id);
 
   /// Uses the device storage to store a document.
   ///

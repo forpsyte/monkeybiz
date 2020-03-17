@@ -33,7 +33,7 @@ class DocumentRemoteDataSource implements DocumentRemoteDataSourceInterface {
   }
 
   @override
-  Future<Document> getById(String id) async {
+  Future<DocumentModel> getById(String id) async {
     final DocumentSnapshot doc =
         await firestore.collection(collection).document(id).get();
 
@@ -45,7 +45,7 @@ class DocumentRemoteDataSource implements DocumentRemoteDataSourceInterface {
   }
 
   @override
-  Future<List<Document>> getList() async {
+  Future<List<DocumentModel>> getList() async {
     try {
       final querySnapshot =
           await firestore.collection(collection).getDocuments();
@@ -61,7 +61,7 @@ class DocumentRemoteDataSource implements DocumentRemoteDataSourceInterface {
   }
 
   @override
-  Future<Document> save(DocumentModel document) async {
+  Future<DocumentModel> save(DocumentModel document) async {
     final colRef = firestore.collection(collection);
     final docRef = document.documentId == null
         ? colRef.document()
