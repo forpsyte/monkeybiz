@@ -41,8 +41,6 @@ class DocumentModel extends Document {
     );
   }
 
-  Map<String, dynamic> get data => _data;
-
   dynamic field(String name) {
     if (!data.containsKey(name)) {
       return null;

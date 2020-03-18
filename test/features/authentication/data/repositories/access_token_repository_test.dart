@@ -155,12 +155,13 @@ void main() {
       'should return CacheFailure when call to local data source unsuccessful',
       () async {
         // arrange
+        final e = CacheException();
         when(mockLocalDataSource.getToken())
-            .thenThrow(CacheException());
+            .thenThrow(e);
         // act
         final result = await repository.getCachedToken();
         // assert
-        expect(result, equals(Left(CacheFailure())));
+        expect(result, equals(Left(CacheFailure(e))));
       },
     );
   });
@@ -184,12 +185,13 @@ void main() {
       'should return CacheFailure when call to local data source is unsuccessful',
       () async {
         // arrange
+        final e = CacheException();
         when(mockLocalDataSource.removeToken())
-            .thenThrow(CacheException('No access token found'));
+            .thenThrow(e);
         // act
         final result = await repository.removeToken();
         // assert
-        expect(result, equals(Left(CacheFailure())));
+        expect(result, equals(Left(CacheFailure(e))));
       },
     );
   });

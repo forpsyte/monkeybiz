@@ -4,7 +4,11 @@ import 'package:flutter/services.dart';
 import 'exceptions.dart';
 
 abstract class Failure extends Equatable {
-  Failure([List properties = const<dynamic>[]]);
+  final Exception exception;
+  
+  Failure([this.exception]);
+
+  String get message => exception.toString();
 }
 
 // General failures

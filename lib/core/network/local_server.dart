@@ -7,7 +7,14 @@ class LocalServer extends LocalServerInterface {
   final StreamController<Map<String, String>> onRequestParams;
   final HttpServer server;
 
-  LocalServer(this.onRequestParams, this.server) : super(onRequestParams, server);
+  LocalServer({
+    StreamController<Map<String, String>> stream,
+    HttpServer httpServer,
+  })  : assert(stream != null),
+        assert(httpServer != null),
+        this.onRequestParams = stream,
+        this.server = httpServer,
+        super(stream, httpServer);
 
   @override
   void handleRequest(HttpRequest request) async {

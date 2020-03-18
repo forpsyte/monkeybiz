@@ -12,6 +12,8 @@ class Document extends Equatable {
         this.documentId = id,
         this._data = data;
 
+  Map<String, dynamic> get data => _data;
+
   @override
   List<Object> get props => [documentId, _data];
 }

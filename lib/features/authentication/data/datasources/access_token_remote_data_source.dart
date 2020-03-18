@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/local_server_interface.dart';
@@ -19,12 +20,12 @@ class AccessTokenRemoteDataSource
   final UrlBuilder urlBuilder;
   final UrlLauncher urlLauncher;
 
-  AccessTokenRemoteDataSource(
-    this.client,
-    this.server,
-    this.urlBuilder,
-    this.urlLauncher,
-  );
+  AccessTokenRemoteDataSource({
+    @required this.client,
+    @required this.server,
+    @required this.urlBuilder,
+    @required this.urlLauncher,
+  });
 
   @override
   Future<AccessTokenModel> getToken(
@@ -49,7 +50,8 @@ class AccessTokenRemoteDataSource
     final Map<String, String> params = await onRequestParams.first;
 
     if (!params.containsKey('code')) {
-      throw AuthenticationException("Failed authenticating user. Invalid request.");
+      throw AuthenticationException(
+          "Failed authenticating user. Invalid request.");
     }
 
     final String code = params['code'];
