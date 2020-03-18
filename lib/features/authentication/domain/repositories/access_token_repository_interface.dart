@@ -11,4 +11,6 @@ abstract class AccessTokenRepositoryInterface {
   );
 
   Future<Either<Failure, AccessToken>> getCachedToken();
+
+  Future<Either<Failure, bool>> removeToken();
 }

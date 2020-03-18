@@ -83,7 +83,7 @@ void main() {
 
     runTestsOnline((){
       test(
-        'should return remote data when call to remote datasource is successful',
+        'should return remote data when call to remote data source is successful',
         () async {
           // arrange
           when(mockRemoteDataSource.getToken(tClientId, tClientSecret, tRedirectUri))
@@ -96,7 +96,7 @@ void main() {
       );
 
       test(
-        'should cache the result when call to remote datasource is successfull',
+        'should cache the result when call to remote data source is successfull',
         () async {
           // arrange
           when(mockRemoteDataSource.getToken(tClientId, tClientSecret, tRedirectUri))
@@ -109,7 +109,7 @@ void main() {
       );
 
       test(
-        'should return AuthenticationFailure when call to remote datasource is unsuccessful',
+        'should return AuthenticationFailure when call to remote data source is unsuccessful',
         () async {
           // arrange
           when(mockRemoteDataSource.getToken(tClientId, tClientSecret, tRedirectUri))
@@ -138,7 +138,7 @@ void main() {
 
   group('getCachedToken', () {
     test(
-      'should return AccessToken when call to local datasource successful',
+      'should return AccessToken when call to local data source successful',
       () async {
         // arrange
         when(mockLocalDataSource.getToken())
@@ -151,13 +151,42 @@ void main() {
     );
 
     test(
-      'should return CacheFailure when call to local datasource unsuccessful',
+      'should return CacheFailure when call to local data source unsuccessful',
       () async {
         // arrange
         when(mockLocalDataSource.getToken())
             .thenAnswer((_) async => null);
         // act
         final result = await repository.getCachedToken();
+        // assert
+        expect(result, equals(Left(CacheFailure())));
+      },
+    );
+  });
+
+  group('removeToken', () {
+    test(
+      'should return true when call to local data source is successful',
+      () async {
+        // arrange
+        when(mockLocalDataSource.removeToken())
+            .thenAnswer((_) async => true);
+        // act
+        final result = await repository.removeToken();
+        // assert
+        expect(result, equals(Right(true)));
+        verify(mockLocalDataSource.removeToken());
+      },
+    );
+
+    test(
+      'should return CacheFailure when call to local data source is unsuccessful',
+      () async {
+        // arrange
+        when(mockLocalDataSource.removeToken())
+            .thenThrow(CacheException());
+        // act
+        final result = await repository.removeToken();
         // assert
         expect(result, equals(Left(CacheFailure())));
       },

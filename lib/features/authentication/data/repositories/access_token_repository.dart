@@ -47,4 +47,14 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
     }
     return Right(token);
   }
+
+  @override
+  Future<Either<Failure, bool>> removeToken() async{
+    try {
+      final result = await localDataSource.removeToken();
+      return Right(result);
+    } on CacheException {
+      return Left(CacheFailure());
+    }
+  }
 }
