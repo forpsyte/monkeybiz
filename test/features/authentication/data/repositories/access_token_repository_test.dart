@@ -1,22 +1,23 @@
 import 'package:dartz/dartz.dart';
-import 'package:mailchimp/features/authentication/data/models/access_token_model.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:mailchimp/core/error/exceptions.dart';
 import 'package:mailchimp/core/error/failures.dart';
 import 'package:mailchimp/core/network/network_info_interface.dart';
-import 'package:mailchimp/features/authentication/data/datasources/access_token_local_data_source.dart';
-import 'package:mailchimp/features/authentication/data/datasources/access_token_remote_data_source.dart';
+import 'package:mailchimp/features/authentication/data/datasources/access_token_local_data_source_interface.dart';
+import 'package:mailchimp/features/authentication/data/datasources/access_token_remote_data_source_interface.dart';
+import 'package:mailchimp/features/authentication/data/models/access_token_model.dart';
 import 'package:mailchimp/features/authentication/data/repositories/access_token_repository.dart';
 
 class MockAccessTokenRemoteDataSource extends Mock
-    implements AccessTokenRemoteDataSource {}
+    implements AccessTokenRemoteDataSourceInterface {}
 
 class MockAccessTokenLocalDataSource extends Mock
-    implements AccessTokenLocalDataSource {}
+    implements AccessTokenLocalDataSourceInterface {}
 
-class MockNetworkInfo extends Mock implements NetworkInfoInterface {}
+class MockNetworkInfo extends Mock 
+    implements NetworkInfoInterface {}
 
 void main() {
   AccessTokenRepository repository;
@@ -155,7 +156,7 @@ void main() {
       () async {
         // arrange
         when(mockLocalDataSource.getToken())
-            .thenAnswer((_) async => null);
+            .thenThrow(CacheException());
         // act
         final result = await repository.getCachedToken();
         // assert
@@ -184,7 +185,7 @@ void main() {
       () async {
         // arrange
         when(mockLocalDataSource.removeToken())
-            .thenThrow(CacheException());
+            .thenThrow(CacheException('No access token found'));
         // act
         final result = await repository.removeToken();
         // assert

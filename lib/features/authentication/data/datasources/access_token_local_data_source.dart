@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:mailchimp/core/error/exceptions.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/error/exceptions.dart';
 import '../models/access_token_model.dart';
 import 'access_token_local_data_source_interface.dart';
 
@@ -36,7 +36,7 @@ class AccessTokenLocalDataSource
   @override
   Future<bool> removeToken() {
     if (!(sharedPreferences.containsKey(ACCESS_TOKEN))) {
-      throw CacheException();
+      throw CacheException('Failed removing access token. No access token found');
     }
     return sharedPreferences.remove(ACCESS_TOKEN);
   }

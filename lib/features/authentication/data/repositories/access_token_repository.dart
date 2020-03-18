@@ -41,11 +41,13 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
 
   @override
   Future<Either<Failure, AccessToken>> getCachedToken() async {
-    final token = await localDataSource.getToken();
-    if (token == null) {
+    try {
+      final token = await localDataSource.getToken();
+      return Right(token);
+    } on CacheException {
       return Left(CacheFailure());
     }
-    return Right(token);
+    
   }
 
   @override
@@ -53,8 +55,8 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
     try {
       final result = await localDataSource.removeToken();
       return Right(result);
-    } on CacheException {
-      return Left(CacheFailure());
+    } on CacheException catch(e) {
+      return Left(CacheFailure(e));
     }
   }
 }

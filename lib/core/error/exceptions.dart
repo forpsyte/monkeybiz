@@ -1,9 +1,40 @@
-class ServerException implements Exception {}
+abstract class CustomException implements Exception {
+  final String message;
 
-class CacheException implements Exception {}
+  CustomException([this.message]);
 
-class DuplicateException implements Exception {}
+  String toString() {
+    if (message == null) return "Exception";
+    return "Exception: $message";
+  }
+}
 
-class ConnectionException implements Exception {}
+class ServerException extends CustomException {
+  final String message;
 
-class AuthenticationException implements Exception {}
+  ServerException([this.message]);
+}
+
+class CacheException extends CustomException {
+  final String message;
+
+  CacheException([this.message]);
+}
+
+class DuplicateException extends CustomException {
+  final String message;
+
+  DuplicateException([this.message]);
+}
+
+class ConnectionException extends CustomException {
+  final String message;
+
+  ConnectionException([this.message]);
+}
+
+class AuthenticationException extends CustomException {
+  final String message;
+
+  AuthenticationException([this.message]);
+}
