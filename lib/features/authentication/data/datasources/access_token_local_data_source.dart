@@ -26,7 +26,7 @@ class AccessTokenLocalDataSource
   @override
   Future<AccessTokenModel> getToken() {
     if (!(sharedPreferences.containsKey(ACCESS_TOKEN))) {
-      throw CacheException();
+      throw CacheException('Failed retrieving access token. No access token found');
     }
     final jsonString = sharedPreferences.getString(ACCESS_TOKEN);
     final token = AccessTokenModel.fromJson(json.decode(jsonString));

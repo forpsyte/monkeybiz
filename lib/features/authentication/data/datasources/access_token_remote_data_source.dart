@@ -49,7 +49,7 @@ class AccessTokenRemoteDataSource
     final Map<String, String> params = await onRequestParams.first;
 
     if (!params.containsKey('code')) {
-      throw AuthenticationException();
+      throw AuthenticationException("Failed authenticating user. Invalid request.");
     }
 
     final String code = params['code'];

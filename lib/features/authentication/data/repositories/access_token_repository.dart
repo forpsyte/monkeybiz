@@ -34,8 +34,8 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
       final token = await remoteDataSource.getToken(clientId, clientSecret, redirectUri);
       await localDataSource.setToken(token);
       return Right(token);
-    } on AuthenticationException {
-      return Left(AuthenticationFailure());
+    } on AuthenticationException catch (e) {
+      return Left(AuthenticationFailure(e));
     }
   }
 
@@ -44,8 +44,8 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
     try {
       final token = await localDataSource.getToken();
       return Right(token);
-    } on CacheException {
-      return Left(CacheFailure());
+    } on CacheException catch (e){
+      return Left(CacheFailure(e));
     }
     
   }
@@ -55,7 +55,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
     try {
       final result = await localDataSource.removeToken();
       return Right(result);
-    } on CacheException catch(e) {
+    } on CacheException catch (e) {
       return Left(CacheFailure(e));
     }
   }
