@@ -12,9 +12,9 @@ import 'access_token_remote_data_source_interface.dart';
 
 class AccessTokenRemoteDataSource
     implements AccessTokenRemoteDataSourceInterface {
-  final String authorizePath = '/authorize';
-  final String accessTokenPath = '/token';
-  final String baseUri = 'login.mailchimp.com/oauth2';
+  final String authorizePath = '/oauth2/authorize';
+  final String accessTokenPath = '/oauth2/token';
+  final String baseUri = 'login.mailchimp.com';
   final http.Client client;
   final LocalServerInterface server;
   final UrlBuilder urlBuilder;
@@ -63,9 +63,12 @@ class AccessTokenRemoteDataSource
       'redirect_uri': redirectUri,
       'code': code
     });
-
     await urlLauncher.closeWebView();
-    final http.Response response = await client.get(accessTokenUrl.toString());
+
+    final http.Response response = await client.post(
+      "${accessTokenUrl.scheme}://${accessTokenUrl.host}${accessTokenUrl.path}",
+      body: accessTokenUrl.queryParameters,
+    );
     final token = AccessTokenModel.fromJson(json.decode(response.body));
     return token;
   }

@@ -57,8 +57,12 @@ class LoginButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 50),
       child: FloatingActionButton.extended(
-        label: Text('Sign In'),
+        label: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Text('Sign In'),
+        ),
         onPressed: () => login(context),
+        shape: RoundedRectangleBorder(),
       ),
     );
   }
@@ -68,6 +72,7 @@ class LoginButton extends StatelessWidget {
     reactiveModel.setState(
       (store) => store.login(),
       onError: (context, error) {
+        print(error);
         Scaffold.of(context).showSnackBar(
           SnackBar(
             content: Text("Couldn't sign in. Is the device online?"),

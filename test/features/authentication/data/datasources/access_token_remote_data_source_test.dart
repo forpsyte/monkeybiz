@@ -72,10 +72,10 @@ void main() {
   };
   final Map<String, String> redirectUriRequestParams = {'code': tCode};
   final Map<String, String> failureRedirectUriRequestParams = {};
-  final String tAuthorizeUrl =
-      Uri.https(baseUri, authorizePath, tAuthorizeRequestParams).toString();
-  final String tAccessTokenUrl =
-      Uri.https(baseUri, accessTokenPath, tAccessTokenRequestParams).toString();
+  final Uri tAuthorizeUrl =
+      Uri.https(baseUri, authorizePath, tAuthorizeRequestParams);
+  final Uri tAccessTokenUrl =
+      Uri.https(baseUri, accessTokenPath, tAccessTokenRequestParams);
   final tResponse = json.decode(fixture('token_response.json'));
   final tAccessToken = AccessTokenModel.fromJson(tResponse);
 
