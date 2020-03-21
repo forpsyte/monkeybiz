@@ -6,7 +6,7 @@ import '../entities/access_token.dart';
 abstract class AccessTokenRepositoryInterface {
   Future<Either<Failure, AccessToken>> getToken(
     String clientId,
-    String clientSecret,
+    String accessTokenUri,
     String redirectUri,
   );
 

@@ -13,8 +13,8 @@ import 'access_token_remote_data_source_interface.dart';
 class AccessTokenRemoteDataSource
     implements AccessTokenRemoteDataSourceInterface {
   final String authorizePath = '/oauth2/authorize';
-  final String accessTokenPath = '/oauth2/token';
-  final String baseUri = 'login.mailchimp.com';
+  final String accessTokenPath = '/production/token';
+  final String authorizeBaseUri = 'login.mailchimp.com';
   final http.Client client;
   final LocalServerInterface server;
   final UrlBuilder urlBuilder;
@@ -30,12 +30,13 @@ class AccessTokenRemoteDataSource
   @override
   Future<AccessTokenModel> getToken(
     String clientId,
-    String clientSecret,
+    String accessTokenUri,
     String redirectUri,
   ) async {
     Stream<Map<String, String>> onRequestParams = await server.start();
 
-    final authorizeUrl = urlBuilder.build(baseUri, authorizePath, true, {
+    final authorizeUrl = urlBuilder.build(
+        authorizeBaseUri, authorizePath, true, {
       'response_type': 'code',
       'client_id': clientId,
       'redirect_uri': redirectUri
@@ -56,19 +57,18 @@ class AccessTokenRemoteDataSource
 
     final String code = params['code'];
 
-    final accessTokenUrl = urlBuilder.build(baseUri, accessTokenPath, true, {
-      'grant_type': 'authorization_code',
-      'client_id': clientId,
-      'client_secret': clientSecret,
-      'redirect_uri': redirectUri,
-      'code': code
-    });
+    final accessTokenUrl =
+        urlBuilder.build(accessTokenUri, accessTokenPath, true, {
+          'code': code
+        });
+
     await urlLauncher.closeWebView();
 
     final http.Response response = await client.post(
-      "${accessTokenUrl.scheme}://${accessTokenUrl.host}${accessTokenUrl.path}",
-      body: accessTokenUrl.queryParameters,
+      accessTokenUrl.toString(),
+      body: json.encode(accessTokenUrl.queryParameters),
     );
+    
     final token = AccessTokenModel.fromJson(json.decode(response.body));
     return token;
   }

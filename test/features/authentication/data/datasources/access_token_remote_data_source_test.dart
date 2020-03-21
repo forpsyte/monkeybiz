@@ -54,8 +54,8 @@ void main() {
   final String accessTokenPath = '/token';
   final String baseUri = 'test.dev';
   final String tClientId = '123456789012';
-  final String tClientSecret =
-      '3251d6876eec030e42025554c8cc042027396a3c6e8bb61dca';
+  final String tAccessTokenUri =
+      'token.test';
   final String tCode = '1edf2589e664fd317f6a7ff5f97b42f7';
   final String tRedirectUri = 'http://127.0.0.1:8080';
   final Map<String, String> tAuthorizeRequestParams = {
@@ -66,7 +66,6 @@ void main() {
   final Map<String, String> tAccessTokenRequestParams = {
     'grant_type': 'authorization_code',
     'client_id': tClientId,
-    'client_secret': tClientSecret,
     'redirect_uri': tRedirectUri,
     'code': tCode
   };
@@ -98,13 +97,13 @@ void main() {
             .thenReturn(tAccessTokenUrl);
         when(mockUrlLauncher.closeWebView())
             .thenAnswer((_) async => null);
-        when(mockClient.get(any))
+        when(mockClient.post(any))
             .thenAnswer((_) async => mockResponse);
         when(mockResponse.body)
             .thenReturn(fixture('token_response.json'));
         // act
         final result =
-            await dataSource.getToken(tClientId, tClientSecret, tRedirectUri);
+            await dataSource.getToken(tClientId, tAccessTokenUri, tRedirectUri);
         // assert
         expect(result, equals(tAccessToken));
       },
@@ -122,7 +121,7 @@ void main() {
         // act
         final call = dataSource.getToken;
         // assert
-        expect(() => call(tClientId, tClientSecret, tRedirectUri),
+        expect(() => call(tClientId, tAccessTokenUri, tRedirectUri),
             throwsA(TypeMatcher<AuthenticationException>()));
       },
     );
@@ -143,7 +142,7 @@ void main() {
         // act
         final call = dataSource.getToken;
         // assert
-        expect(() => call(tClientId, tClientSecret, tRedirectUri),
+        expect(() => call(tClientId, tAccessTokenUri, tRedirectUri),
             throwsA(TypeMatcher<AuthenticationException>()));
       },
     );

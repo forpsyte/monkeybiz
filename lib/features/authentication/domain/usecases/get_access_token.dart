@@ -17,7 +17,7 @@ class GetAccessToken extends UseCase<AccessToken, OauthParams> {
     }
     return await repository.getToken(
       params.clientId,
-      params.clientSecret,
+      params.accessTokenUri,
       params.redirectUri,
     );
   }

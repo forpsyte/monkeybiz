@@ -40,7 +40,7 @@ class AuthenticationStore {
 
     final authenticate = await getAccessToken(OauthParams(
       clientId: document.data['client_id'],
-      clientSecret: document.data['client_secret'],
+      accessTokenUri: document.data['access_token_uri'],
       redirectUri: document.data['redirect_uri'],
     ));
 

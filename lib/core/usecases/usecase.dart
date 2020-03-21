@@ -26,15 +26,15 @@ class RequestParams extends Equatable {
 
 class OauthParams extends Equatable {
   final String clientId;
-  final String clientSecret;
+  final String accessTokenUri;
   final String redirectUri;
 
   OauthParams({
     this.clientId,
-    this.clientSecret,
+    this.accessTokenUri,
     this.redirectUri,
   });
 
   @override
-  List<Object> get props => [clientId, clientSecret, redirectUri];
+  List<Object> get props => [clientId, accessTokenUri, redirectUri];
 }

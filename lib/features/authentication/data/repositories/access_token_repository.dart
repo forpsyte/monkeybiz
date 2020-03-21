@@ -23,7 +23,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
   @override
   Future<Either<Failure, AccessToken>> getToken(
     String clientId,
-    String clientSecret,
+    String accessTokenUri,
     String redirectUri,
   ) async {
     if (!(await networkInfo.isConnected)) {
@@ -31,7 +31,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface {
     }
 
     try {
-      final token = await remoteDataSource.getToken(clientId, clientSecret, redirectUri);
+      final token = await remoteDataSource.getToken(clientId, accessTokenUri, redirectUri);
       await localDataSource.setToken(token);
       return Right(token);
     } on AuthenticationException catch (e) {

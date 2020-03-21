@@ -19,7 +19,7 @@ void main() {
   });
 
   final tClientId = 'test_client_id';
-  final tClientSecret = 'test_client_secret';
+  final tAccessTokenUri = 'token.test';
   final tRedirectUri = 'http://127.0.0.1:8080';
 
   final tAccessToken =
@@ -34,12 +34,12 @@ void main() {
       // act
       final result = await usecase(OauthParams(
         clientId: tClientId,
-        clientSecret: tClientSecret,
+        accessTokenUri: tAccessTokenUri,
         redirectUri: tRedirectUri,
       ));
       // assert
       expect(result, Right(tAccessToken));
-			verify(mockAccessTokenRepository.getToken(tClientId, tClientSecret, tRedirectUri));
+			verify(mockAccessTokenRepository.getToken(tClientId, tAccessTokenUri, tRedirectUri));
 			verifyNoMoreInteractions(mockAccessTokenRepository);
     },
   );
