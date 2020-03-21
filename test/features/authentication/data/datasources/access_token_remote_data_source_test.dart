@@ -50,12 +50,11 @@ void main() {
     );
   });
 
-  final String authorizePath = '/authorize';
-  final String accessTokenPath = '/token';
+  final String authorizePath = '/oauth2/authorize';
+  final String accessTokenPath = '/production/token';
   final String baseUri = 'test.dev';
   final String tClientId = '123456789012';
-  final String tAccessTokenUri =
-      'token.test';
+  final String tAccessTokenUri = 'token.test';
   final String tCode = '1edf2589e664fd317f6a7ff5f97b42f7';
   final String tRedirectUri = 'http://127.0.0.1:8080';
   final Map<String, String> tAuthorizeRequestParams = {
@@ -64,9 +63,6 @@ void main() {
     'redirect_uri': tRedirectUri,
   };
   final Map<String, String> tAccessTokenRequestParams = {
-    'grant_type': 'authorization_code',
-    'client_id': tClientId,
-    'redirect_uri': tRedirectUri,
     'code': tCode
   };
   final Map<String, String> redirectUriRequestParams = {'code': tCode};
@@ -92,15 +88,12 @@ void main() {
             .thenAnswer((_) async => null);
         when(mockStream.first)
             .thenAnswer((_) async => redirectUriRequestParams);
-        when(mockUrlBuilder.build(
-                baseUri, accessTokenPath, true, tAccessTokenRequestParams))
+        when(mockUrlBuilder.build(tAccessTokenUri, accessTokenPath, true,
+                tAccessTokenRequestParams))
             .thenReturn(tAccessTokenUrl);
-        when(mockUrlLauncher.closeWebView())
-            .thenAnswer((_) async => null);
-        when(mockClient.post(any))
-            .thenAnswer((_) async => mockResponse);
-        when(mockResponse.body)
-            .thenReturn(fixture('token_response.json'));
+        when(mockUrlLauncher.closeWebView()).thenAnswer((_) async => null);
+        when(mockClient.post(any, body: anyNamed("body"))).thenAnswer((_) async => mockResponse);
+        when(mockResponse.body).thenReturn(fixture('token_response.json'));
         // act
         final result =
             await dataSource.getToken(tClientId, tAccessTokenUri, tRedirectUri);
