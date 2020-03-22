@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mailchimp/features/authentication/presentation/pages/authentication_page.dart';
-import 'package:mailchimp/features/authentication/presentation/state/authentication_store.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
+
+import 'features/authentication/presentation/state/authentication_store.dart';
+import 'features/index/presentation/widgets/index.dart';
 import 'injection_container.dart' as di;
 
 void main() async {
@@ -23,7 +24,7 @@ class App extends StatelessWidget {
         inject: [
           Inject<AuthenticationStore>(() => di.sl<AuthenticationStore>()),
         ],
-        builder: (context) => AuthenticationPage(),
+        builder: (context) => Index(),
       ),
     );
   }

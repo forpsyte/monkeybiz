@@ -40,7 +40,7 @@ dependencies:
   flutter_mobx: ^1.0.1
   mobx: ^1.0.2
   # Service locator
-  get_it: ^2.0.1
+  get_it: ^4.0.1
   # Material icons
   material_design_icons_flutter: ^3.4.4995
   # Network state

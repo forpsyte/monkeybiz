@@ -14,7 +14,7 @@ abstract class LocalServerInterface {
   
   void _handleRequest(HttpRequest request) async {
     handleRequest(request);
-    await server.close(force: true);
+    await server.close();
     await onRequestParams.close();
   }
   

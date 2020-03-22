@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
 import '../../../../core/error/exceptions.dart';
-import '../../../../core/network/local_server_interface.dart';
+import '../../../../core/network/local_server_builder.dart';
 import '../../../../core/utils/url_builder.dart';
 import '../../../../core/utils/url_launcher.dart';
 import '../models/access_token_model.dart';
@@ -16,13 +16,13 @@ class AccessTokenRemoteDataSource
   final String accessTokenPath = '/production/token';
   final String authorizeBaseUri = 'login.mailchimp.com';
   final http.Client client;
-  final LocalServerInterface server;
+  final LocalServerBuilder serverBuilder;
   final UrlBuilder urlBuilder;
   final UrlLauncher urlLauncher;
 
   AccessTokenRemoteDataSource({
     @required this.client,
-    @required this.server,
+    @required this.serverBuilder,
     @required this.urlBuilder,
     @required this.urlLauncher,
   });
@@ -33,6 +33,8 @@ class AccessTokenRemoteDataSource
     String accessTokenUri,
     String redirectUri,
   ) async {
+    
+    final server = await serverBuilder.build();
     Stream<Map<String, String>> onRequestParams = await server.start();
 
     final authorizeUrl = urlBuilder.build(
@@ -58,9 +60,7 @@ class AccessTokenRemoteDataSource
     final String code = params['code'];
 
     final accessTokenUrl =
-        urlBuilder.build(accessTokenUri, accessTokenPath, true, {
-          'code': code
-        });
+        urlBuilder.build(accessTokenUri, accessTokenPath, true, {'code': code});
 
     await urlLauncher.closeWebView();
 
@@ -68,7 +68,7 @@ class AccessTokenRemoteDataSource
       accessTokenUrl.toString(),
       body: json.encode(accessTokenUrl.queryParameters),
     );
-    
+
     final token = AccessTokenModel.fromJson(json.decode(response.body));
     return token;
   }

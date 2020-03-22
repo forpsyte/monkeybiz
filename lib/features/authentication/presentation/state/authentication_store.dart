@@ -14,7 +14,7 @@ class AuthenticationStore {
     GetAccessToken loginAction,
     GetDocumentById configAction,
     RemoveAccessToken logoutAction,
-  }) :  assert(loginAction != null),
+  })  : assert(loginAction != null),
         assert(configAction != null),
         assert(logoutAction != null),
         getAccessToken = loginAction,
@@ -64,6 +64,19 @@ class AuthenticationStore {
       },
       (success) {
         return null;
+      },
+    );
+  }
+
+  void checkLoginStatus() async {
+    final authenticate = await getAccessToken();
+
+    _accessToken = authenticate.fold(
+      (failure) {
+        return null;
+      },
+      (accessToken) {
+        return accessToken;
       },
     );
   }

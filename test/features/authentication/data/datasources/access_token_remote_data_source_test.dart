@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:mailchimp/core/network/local_server_builder.dart';
 import 'package:matcher/matcher.dart';
 import 'package:mockito/mockito.dart';
 
@@ -18,6 +19,8 @@ class MockClient extends Mock implements http.Client {}
 
 class MockResponse extends Mock implements http.Response {}
 
+class MockLocalServerBuilder extends Mock implements LocalServerBuilder {}
+
 class MockLocalServer extends Mock implements LocalServerInterface {}
 
 class MockUrlBuilder extends Mock implements UrlBuilder {}
@@ -31,6 +34,7 @@ void main() {
   MockClient mockClient;
   MockResponse mockResponse;
   MockLocalServer mockLocalServer;
+  MockLocalServerBuilder mockLocalServerBuilder;
   MockUrlBuilder mockUrlBuilder;
   MockUrlLauncher mockUrlLauncher;
   AccessTokenRemoteDataSource dataSource;
@@ -40,11 +44,12 @@ void main() {
     mockClient = MockClient();
     mockResponse = MockResponse();
     mockLocalServer = MockLocalServer();
+    mockLocalServerBuilder = MockLocalServerBuilder();
     mockUrlBuilder = MockUrlBuilder();
     mockUrlLauncher = MockUrlLauncher();
     dataSource = AccessTokenRemoteDataSource(
       client: mockClient,
-      server: mockLocalServer,
+      serverBuilder: mockLocalServerBuilder,
       urlBuilder: mockUrlBuilder,
       urlLauncher: mockUrlLauncher,
     );
@@ -79,6 +84,8 @@ void main() {
       'should return AccessToken when authentication is successful',
       () async {
         // arrange
+        when(mockLocalServerBuilder.build())
+            .thenAnswer((_) async => mockLocalServer);
         when(mockLocalServer.start()).thenAnswer((_) async => mockStream);
         when(mockUrlBuilder.build(
                 baseUri, authorizePath, true, tAuthorizeRequestParams))
@@ -106,6 +113,8 @@ void main() {
       'should throw an AuthenticationException when the device is unable to open the url',
       () async {
         // arrange
+        when(mockLocalServerBuilder.build())
+            .thenAnswer((_) async => mockLocalServer);
         when(mockLocalServer.start()).thenAnswer((_) async => mockStream);
         when(mockUrlBuilder.build(
                 baseUri, authorizePath, true, tAuthorizeRequestParams))
@@ -123,6 +132,8 @@ void main() {
       'should throw an AuthenticationException when there is an improper request to the local server',
       () async {
         // arrange
+        when(mockLocalServerBuilder.build())
+            .thenAnswer((_) async => mockLocalServer);
         when(mockLocalServer.start()).thenAnswer((_) async => mockStream);
         when(mockUrlBuilder.build(
                 baseUri, authorizePath, true, tAuthorizeRequestParams))

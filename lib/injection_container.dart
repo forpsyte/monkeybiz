@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
@@ -14,8 +13,7 @@ import 'core/features/firestore/data/datasources/document_remote_data_source_int
 import 'core/features/firestore/data/repositories/document_repository.dart';
 import 'core/features/firestore/domain/repositories/document_repository_interface.dart';
 import 'core/features/firestore/domain/usecases/get_document_by_id.dart';
-import 'core/network/local_server.dart';
-import 'core/network/local_server_interface.dart';
+import 'core/network/local_server_builder.dart';
 import 'core/network/network_info_interface.dart';
 import 'core/network/network_info_mobile.dart';
 import 'core/utils/url_builder.dart';
@@ -61,7 +59,7 @@ Future<void> init() async {
   sl.registerLazySingleton<AccessTokenRemoteDataSourceInterface>(
     () => AccessTokenRemoteDataSource(
       client: sl(),
-      server: sl(),
+      serverBuilder: sl(),
       urlBuilder: sl(),
       urlLauncher: sl(),
     ),
@@ -106,25 +104,18 @@ Future<void> init() async {
   );
 
   //! Core
-  sl.registerLazySingleton<LocalServerInterface>(
-    () => LocalServer(
-      stream: sl(),
-      httpServer: sl(),
-    ),
+  sl.registerLazySingleton(
+    () => LocalServerBuilder(),
   );
-
-  sl.registerLazySingleton<NetworkInfoInterface>(() => NetworkInfoMobile(sl()));
+  sl.registerLazySingleton<NetworkInfoInterface>(
+    () => NetworkInfoMobile(sl()),
+  );
 
   //! External
   final http.Client client = http.Client();
-  final StreamController<Map<String, String>> stream = StreamController();
-  final HttpServer server =
-      await HttpServer.bind(InternetAddress.loopbackIPv4, 8080);
   final sharedPreferences = await SharedPreferences.getInstance();
   final firestore = Firestore.instance;
   sl.registerLazySingleton(() => client);
-  sl.registerLazySingleton(() => stream);
-  sl.registerLazySingleton(() => server);
   sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => firestore);
   sl.registerLazySingleton(() => DataConnectionChecker());
