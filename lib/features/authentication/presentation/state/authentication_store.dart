@@ -79,5 +79,7 @@ class AuthenticationStore {
         return accessToken;
       },
     );
+
+    print(_accessToken);
   }
 }

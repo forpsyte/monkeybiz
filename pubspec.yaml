@@ -64,3 +64,25 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: Pacifico
+      fonts:
+        - asset: assets/fonts/Pacifico-Regular.ttf
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-ExtraLight.ttf 
+          weight: 100
+        - asset: assets/fonts/Montserrat-Light.ttf 
+          weight: 200
+        - asset: assets/fonts/Montserrat-Regular.ttf
+          weight: 300
+        - asset: assets/fonts/Montserrat-Medium.ttf 
+          weight: 400
+        - asset: assets/fonts/Montserrat-SemiBold.ttf 
+          weight: 500
+        - asset: assets/fonts/Montserrat-Bold.ttf
+          weight: 600
+        - asset: assets/fonts/Montserrat-ExtraBold.ttf
+          weight: 700
+        - asset: assets/fonts/Montserrat-Black.ttf
+          weight: 800

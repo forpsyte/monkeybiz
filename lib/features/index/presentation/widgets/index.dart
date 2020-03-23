@@ -9,14 +9,15 @@ class Index extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        color: Colors.yellow.shade700,
         child: StateBuilder<AuthenticationStore>(
           models: [Injector.getAsReactive<AuthenticationStore>()],
           builder: (_, reactiveModel) {
             return reactiveModel.whenConnectionState(
               onIdle: () => buildLoading(),
               onWaiting: () => buildLoading(),
-              onData: (store) => buildInitialScreen(store.accessToken),
-              onError: (_) => buildInitialInput(),
+              onData: (store) => buildInitialScreen(context, store.accessToken),
+              onError: (_) => buildLoginScreen(context),
             );
           },
           afterInitialBuild: (context, reactiveModel) {
@@ -27,9 +28,37 @@ class Index extends StatelessWidget {
     );
   }
 
-  Widget buildInitialInput() {
+  Widget buildLoginScreen(BuildContext context) {
     return Center(
-      child: LoginButton(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          SizedBox(
+            height: 20.0,
+          ),
+          Container(
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "MonkeyBiz",
+                  style: Theme.of(context).textTheme.display1,
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Text(
+                  "A Mailchimp Application",
+                  style: Theme.of(context).textTheme.display2,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          LoginButton(),
+        ],
+      ),
     );
   }
 
@@ -39,9 +68,9 @@ class Index extends StatelessWidget {
     );
   }
 
-  Widget buildInitialScreen(AccessToken accessToken) {
+  Widget buildInitialScreen(BuildContext context, AccessToken accessToken) {
     if (accessToken == null) {
-      return buildInitialInput();
+      return buildLoginScreen(context);
     } else {
       return Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
