@@ -3,7 +3,7 @@ import 'package:states_rebuilder/states_rebuilder.dart';
 
 import '../../../../injection_container.dart' as di;
 import '../../../authentication/presentation/state/authentication_store.dart';
-import 'index.dart';
+import '../pages/index_page.dart';
 
 class App extends StatelessWidget {
   @override
@@ -31,7 +31,7 @@ class App extends StatelessWidget {
         inject: [
           Inject<AuthenticationStore>(() => di.sl<AuthenticationStore>()),
         ],
-        builder: (context) => Index(),
+        builder: (context) => IndexPage(),
       ),
       debugShowCheckedModeBanner: false,
     );

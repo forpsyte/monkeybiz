@@ -1,6 +1,5 @@
-import 'package:mailchimp/core/usecases/usecase.dart';
-
 import '../../../../core/features/firestore/domain/usecases/get_document_by_id.dart';
+import '../../../../core/usecases/usecase.dart';
 import '../../domain/entities/access_token.dart';
 import '../../domain/usecases/get_access_token.dart';
 import '../../domain/usecases/remove_access_token.dart';
@@ -9,6 +8,8 @@ class AuthenticationStore {
   final GetAccessToken getAccessToken;
   final GetDocumentById getDocumentById;
   final RemoveAccessToken removeAccessToken;
+  AccessToken _accessToken;
+  bool completedLogin = false;
 
   AuthenticationStore({
     GetAccessToken loginAction,
@@ -21,11 +22,10 @@ class AuthenticationStore {
         getDocumentById = configAction,
         removeAccessToken = logoutAction;
 
-  AccessToken _accessToken;
-
   AccessToken get accessToken => _accessToken;
 
   void login() async {
+    completedLogin = false;
     final config = await getDocumentById('mailchimp_api_credentials');
 
     final document = config.fold(
@@ -43,6 +43,8 @@ class AuthenticationStore {
       accessTokenUri: document.data['access_token_uri'],
       redirectUri: document.data['redirect_uri'],
     ));
+
+    completedLogin = true;
 
     _accessToken = authenticate.fold(
       (failure) {
@@ -79,7 +81,5 @@ class AuthenticationStore {
         return accessToken;
       },
     );
-
-    print(_accessToken);
   }
 }

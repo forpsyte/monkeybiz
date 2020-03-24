@@ -1,10 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:mailchimp/features/index/presentation/widgets/login_button.dart';
+import 'package:mailchimp/features/index/presentation/widgets/logout_button.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
 import '../../../authentication/domain/entities/access_token.dart';
 import '../../../authentication/presentation/state/authentication_store.dart';
 
-class Index extends StatelessWidget {
+class IndexPage extends StatefulWidget {
+  const IndexPage({ Key key }) : super(key: key);
+
+  @override
+  _IndexPageState createState() => _IndexPageState();
+}
+
+class _IndexPageState extends State<IndexPage> with WidgetsBindingObserver{
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    final reactiveModel = Injector.getAsReactive<AuthenticationStore>();
+    
+    if(state == AppLifecycleState.paused) {
+      return;
+    }
+    
+    if(state == AppLifecycleState.resumed && !reactiveModel.state.completedLogin) {
+      return checkLoginStatus(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +69,7 @@ class Index extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           SizedBox(
-            height: 20.0,
+            height: 75.0,
           ),
           Container(
             child: Column(
@@ -88,7 +123,7 @@ class Index extends StatelessWidget {
     }
   }
 
-  void checkLoginStatus(BuildContext context) {
+  void checkLoginStatus(BuildContext context) async {
     final reactiveModel = Injector.getAsReactive<AuthenticationStore>();
     reactiveModel.setState(
       (store) => store.checkLoginStatus(),
@@ -97,70 +132,6 @@ class Index extends StatelessWidget {
         Scaffold.of(context).showSnackBar(
           SnackBar(
             content: Text("Couldn't sign in. Is the device online?"),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class LoginButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50),
-      child: FloatingActionButton.extended(
-        label: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Text('Sign In'),
-        ),
-        onPressed: () => login(context),
-        shape: RoundedRectangleBorder(),
-      ),
-    );
-  }
-
-  void login(BuildContext context) {
-    final reactiveModel = Injector.getAsReactive<AuthenticationStore>();
-    reactiveModel.setState(
-      (store) => store.login(),
-      onError: (context, error) {
-        print(error);
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Couldn't sign in. Is the device online?"),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class LogoutButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50),
-      child: FloatingActionButton.extended(
-        label: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Text('Sign Out'),
-        ),
-        onPressed: () => logout(context),
-        shape: RoundedRectangleBorder(),
-      ),
-    );
-  }
-
-  void logout(BuildContext context) {
-    final reactiveModel = Injector.getAsReactive<AuthenticationStore>();
-    reactiveModel.setState(
-      (store) => store.logout(),
-      onError: (context, error) {
-        print(error);
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Couldn't sign out. Please try again."),
           ),
         );
       },
