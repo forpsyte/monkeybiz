@@ -33,7 +33,7 @@ class AccessTokenRemoteDataSource
     String accessTokenUri,
     String redirectUri,
   ) async {
-    
+
     final server = await serverBuilder.build();
     Stream<Map<String, String>> onRequestParams = await server.start();
 
@@ -59,10 +59,12 @@ class AccessTokenRemoteDataSource
 
     final String code = params['code'];
 
-    final accessTokenUrl =
-        urlBuilder.build(accessTokenUri, accessTokenPath, true, {'code': code});
-
-    await urlLauncher.closeWebView();
+    final accessTokenUrl = urlBuilder.build(
+      accessTokenUri,
+      accessTokenPath,
+      true,
+      {'code': code},
+    );
 
     final http.Response response = await client.post(
       accessTokenUrl.toString(),
@@ -70,6 +72,9 @@ class AccessTokenRemoteDataSource
     );
 
     final token = AccessTokenModel.fromJson(json.decode(response.body));
+
+    await urlLauncher.closeWebView();
+
     return token;
   }
 }
