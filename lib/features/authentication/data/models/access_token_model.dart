@@ -1,4 +1,6 @@
-import 'package:mailchimp/features/authentication/domain/entities/access_token.dart';
+import 'package:meta/meta.dart';
+
+import '../../domain/entities/access_token.dart';
 
 class AccessTokenModel extends AccessToken {
   final String token;
@@ -6,10 +8,10 @@ class AccessTokenModel extends AccessToken {
   final String scope;
 
   AccessTokenModel({
-    this.token,
-    this.expiresIn,
-    this.scope,
-  }) : super(token: token, expiresIn: expiresIn, scope: scope);
+    @required this.token,
+    @required this.expiresIn,
+    @required this.scope,
+  })  : super(token: token, expiresIn: expiresIn, scope: scope);
 
   factory AccessTokenModel.fromJson(Map<String, dynamic> json) {
     return AccessTokenModel(
@@ -23,7 +25,7 @@ class AccessTokenModel extends AccessToken {
     return {
       "access_token": token,
       "expires_in": expiresIn,
-      "scope": scope
+      "scope": scope,
     };
   }
 }
