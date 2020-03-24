@@ -21,7 +21,7 @@ class LocalServer extends LocalServerInterface {
     request.response
       ..statusCode = 200
       ..headers.set("Content-Type", ContentType.html.mimeType)
-      ..write("<html><h1>You can now close this window</h1></html>");
+      ..write("<html></html>");
     await request.response.close();
     onRequestParams.add(request.uri.queryParameters);
   }
